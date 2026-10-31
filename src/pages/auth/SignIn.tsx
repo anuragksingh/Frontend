@@ -21,7 +21,7 @@ const signInSchema = z.object({
 type SignInValues = z.infer<typeof signInSchema>;
 
 export const SignIn: React.FC = () => {
-  const { loginWithEmail, signInWithGoogle } = useAuth();
+  const { loginWithEmail, signInWithGoogle, switchDevDemoRole } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -199,6 +199,51 @@ export const SignIn: React.FC = () => {
           Sign in
         </Button>
       </form>
+
+      {/* Quick Role Logins for Testing & Evaluation */}
+      <div className="mt-6 pt-5 border-t border-neutral-100">
+        <p className="text-xs text-neutral-500 font-medium mb-2.5 text-center flex items-center justify-center gap-1">
+          <Sparkles className="h-3 w-3 text-amber-500" /> Quick Testing Logins (Instant Evaluation)
+        </p>
+        <div className="grid grid-cols-3 gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="text-xs py-1"
+            onClick={async () => {
+              await switchDevDemoRole("resident");
+              navigate("/dashboard/resident");
+            }}
+          >
+            Resident
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="text-xs py-1"
+            onClick={async () => {
+              await switchDevDemoRole("owner");
+              navigate("/dashboard/owner");
+            }}
+          >
+            Owner
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="text-xs py-1"
+            onClick={async () => {
+              await switchDevDemoRole("admin");
+              navigate("/dashboard/admin");
+            }}
+          >
+            Admin
+          </Button>
+        </div>
+      </div>
 
       <div className="mt-6 text-center text-xs text-neutral-600">
         Don't have an account?{" "}

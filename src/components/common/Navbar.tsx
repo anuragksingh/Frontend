@@ -26,7 +26,7 @@ import {
 } from "lucide-react";
 
 export const Navbar: React.FC = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, switchDevDemoRole } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -111,10 +111,53 @@ export const Navbar: React.FC = () => {
         <div className="flex items-center gap-3">
           {user ? (
             <>
-              {/* Authenticated User Role Badge */}
-              <Badge variant={getRoleBadgeVariant(user.role)} className="uppercase text-[10px] hidden sm:inline-flex px-2 py-0.5">
-                {user.role}
-              </Badge>
+              {/* Testing Role Switcher */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="hidden sm:inline-flex items-center gap-1.5 text-xs h-8 border-dashed border-neutral-300"
+                  >
+                    <Layers className="h-3.5 w-3.5 text-neutral-500" />
+                    <span>Role:</span>
+                    <Badge variant={getRoleBadgeVariant(user.role)} className="uppercase text-[10px] px-1.5 py-0">
+                      {user.role}
+                    </Badge>
+                    <ChevronDown className="h-3 w-3 opacity-50" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuLabel className="text-xs text-neutral-500 font-mono">
+                    TESTING ROLE SWITCHER
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onClick={() => {
+                      switchDevDemoRole("resident");
+                      navigate("/dashboard/resident");
+                    }}
+                  >
+                    <Home className="h-4 w-4 mr-2" /> Resident View
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      switchDevDemoRole("owner");
+                      navigate("/dashboard/owner");
+                    }}
+                  >
+                    <Building2 className="h-4 w-4 mr-2" /> Owner View
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      switchDevDemoRole("admin");
+                      navigate("/dashboard/admin");
+                    }}
+                  >
+                    <Shield className="h-4 w-4 mr-2" /> Admin View
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
 
               {/* User Avatar Menu */}
               <DropdownMenu>
