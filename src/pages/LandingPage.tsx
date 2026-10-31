@@ -222,25 +222,36 @@ export const LandingPage: React.FC = () => {
 
       {/* High-Impact CTA Section (cta.gallery style) */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
-        <div className="bg-neutral-900 text-white rounded-3xl p-8 sm:p-14 text-center relative overflow-hidden shadow-2xl">
+        <div className="bg-neutral-950 text-white rounded-3xl p-8 sm:p-14 text-center relative overflow-hidden shadow-2xl border border-neutral-800">
+          {/* Subtle ambient lighting accent */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-36 bg-gradient-to-b from-neutral-800/40 to-transparent blur-2xl pointer-events-none" />
+
           <div className="relative z-10 space-y-4 max-w-xl mx-auto">
-            <Badge className="bg-white/10 text-white border-white/20 text-xs">
+            <Badge className="bg-neutral-800/80 text-neutral-200 border-neutral-700 text-xs px-3 py-1 font-mono tracking-wider">
               READY TO ELEVATE YOUR COLIVING EXPERIENCE?
             </Badge>
-            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
+            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight leading-tight">
               Begin your semester with total peace of mind.
             </h2>
-            <p className="text-sm text-neutral-300 leading-relaxed">
-              Join hundreds of residents and property managers already using HostelHub for verified bookings, meal scheduling, and transparent billing.
+            <p className="text-sm text-neutral-400 leading-relaxed max-w-lg mx-auto">
+              Join hundreds of verified residents and property managers using HostelHub for transparent room bookings, meal scheduling, and digital invoices.
             </p>
-            <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
+            <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link to="/sign-up" className="w-full sm:w-auto">
-                <Button size="lg" className="w-full sm:w-auto bg-white text-neutral-900 hover:bg-neutral-100 font-semibold px-8 py-5 rounded-xl">
+                <Button
+                  size="lg"
+                  className="w-full sm:w-auto bg-white text-neutral-950 hover:bg-neutral-100 font-semibold px-8 py-6 rounded-xl shadow-lg transition-all active:scale-[0.98] border border-white"
+                >
                   Create Free Account
+                  <ArrowRight className="h-4 w-4 ml-2" />
                 </Button>
               </Link>
               <Link to="/sign-in" className="w-full sm:w-auto">
-                <Button size="lg" variant="outline" className="w-full sm:w-auto border-neutral-700 text-white hover:bg-neutral-800 px-8 py-5 rounded-xl">
+                <Button
+                  size="lg"
+                  variant="ghost"
+                  className="w-full sm:w-auto bg-neutral-900/90 hover:bg-neutral-800 text-neutral-200 hover:text-white border border-neutral-700 font-medium px-8 py-6 rounded-xl transition-all active:scale-[0.98]"
+                >
                   Sign In with Existing Profile
                 </Button>
               </Link>
