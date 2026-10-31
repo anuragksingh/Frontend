@@ -212,3 +212,4 @@ export const DigitalMealPass: React.FC<DigitalMealPassProps> = ({
     </Dialog>
   );
 };
+

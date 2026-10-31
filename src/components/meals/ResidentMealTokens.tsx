@@ -478,3 +478,4 @@ export const ResidentMealTokens: React.FC<ResidentMealTokensProps> = ({
     </div>
   );
 };
+

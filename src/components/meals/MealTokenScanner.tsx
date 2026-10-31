@@ -477,3 +477,4 @@ export const MealTokenScanner: React.FC<MealTokenScannerProps> = ({
     </div>
   );
 };
+

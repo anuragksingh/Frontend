@@ -57,3 +57,4 @@ export interface MealBillingSummary {
   currencySymbol: string;
   transactions: MealTransaction[];
 }
+
