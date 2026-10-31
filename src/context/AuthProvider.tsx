@@ -226,19 +226,31 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // One-click testing role switcher for instant evaluation
   const switchDevDemoRole = async (role: UserRole) => {
-    const roleProfiles: Record<UserRole, { email: string; name: string }> = {
-      resident: { email: "resident@student.edu", name: "Rohan Patel (Resident)" },
-      owner: { email: "owner@urbanliving.com", name: "Vikram Malhotra (Owner)" },
-      admin: { email: "admin@hostelhub.com", name: "System Administrator" },
+    const roleProfiles: Record<UserRole, { uid: string; email: string; name: string }> = {
+      resident: {
+        uid: "resident-student-uid",
+        email: "resident@student.edu",
+        name: "Rohan Patel (Resident)",
+      },
+      owner: {
+        uid: "owner-urban-uid",
+        email: "owner@urbanliving.com",
+        name: "Vikram Malhotra (Owner)",
+      },
+      admin: {
+        uid: "admin-platform-uid",
+        email: "admin@hostelhub.com",
+        name: "System Administrator",
+      },
     };
 
     const target = roleProfiles[role];
     const mockFbUser = {
-      uid: `sim-role-${role}`,
+      uid: target.uid,
       email: target.email,
       displayName: target.name,
       emailVerified: true,
-      getIdToken: async () => `mock-${role}:${target.email}`,
+      getIdToken: async () => `mock-${target.uid}:${target.email}`,
     };
 
     setFirebaseUser(mockFbUser);
