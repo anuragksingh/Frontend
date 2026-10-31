@@ -18,6 +18,9 @@ import {
 } from "@/components/ui/dialog";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { SkeletonTable } from "@/components/common/SkeletonTable";
+import { MealTokenScanner } from "@/components/meals/MealTokenScanner";
+import { OwnerMealPricingConfig } from "@/components/meals/OwnerMealPricingConfig";
+import { MealItem } from "@/types/meal";
 import { toast } from "sonner";
 import {
   BarChart,
@@ -41,6 +44,8 @@ import {
   Calendar,
   Utensils,
   TrendingUp,
+  QrCode,
+  Sliders,
 } from "lucide-react";
 
 export const OwnerDashboard: React.FC = () => {
@@ -51,6 +56,10 @@ export const OwnerDashboard: React.FC = () => {
   const [hostels, setHostels] = useState<Hostel[]>([]);
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+
+  // State: Meal Token Redemptions & Pricing Config
+  const [redemptionHistory, setRedemptionHistory] = useState<any[]>([]);
+  const [mealsList, setMealsList] = useState<MealItem[]>([]);
 
   // State: Create Hostel Dialog
   const [createDialogOpen, setCreateDialogOpen] = useState<boolean>(false);
@@ -84,8 +93,32 @@ export const OwnerDashboard: React.FC = () => {
     }
   };
 
+  const fetchRedemptions = async () => {
+    try {
+      const res = await api.get("/meal-tokens/history");
+      if (res.data.success) {
+        setRedemptionHistory(res.data.history);
+      }
+    } catch (err) {
+      console.warn("Redemptions fetch:", err);
+    }
+  };
+
+  const fetchMeals = async () => {
+    try {
+      const res = await api.get("/meals/today");
+      if (res.data.success) {
+        setMealsList(res.data.meals);
+      }
+    } catch (err) {
+      console.warn("Meals fetch:", err);
+    }
+  };
+
   useEffect(() => {
     fetchData();
+    fetchRedemptions();
+    fetchMeals();
   }, []);
 
   // Update Booking Status (Approve / Reject)
@@ -174,7 +207,21 @@ export const OwnerDashboard: React.FC = () => {
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-auto">
+              <TabsList className="bg-neutral-100 p-1">
+                <TabsTrigger value="overview" className="text-xs">
+                  <Building2 className="h-3.5 w-3.5 mr-1.5" /> Overview & Rents
+                </TabsTrigger>
+                <TabsTrigger value="meal-scanner" className="text-xs font-semibold">
+                  <QrCode className="h-3.5 w-3.5 mr-1.5 text-emerald-600" /> Meal Token Scanner
+                </TabsTrigger>
+                <TabsTrigger value="meal-pricing" className="text-xs">
+                  <Utensils className="h-3.5 w-3.5 mr-1.5" /> Meal Pricing & Timings
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
+
             <Button
               className="bg-neutral-900 hover:bg-neutral-800 text-white text-xs"
               onClick={() => setCreateDialogOpen(true)}
@@ -186,7 +233,10 @@ export const OwnerDashboard: React.FC = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 space-y-8">
-        {/* Metric Overview Cards */}
+        {/* TAB 1: OVERVIEW & PROPERTY METRICS */}
+        {activeTab === "overview" && (
+          <div className="space-y-8">
+            {/* Metric Overview Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <Card className="border border-neutral-200/90 shadow-sm">
             <CardHeader className="p-5 pb-2 flex flex-row items-center justify-between">
@@ -437,8 +487,31 @@ export const OwnerDashboard: React.FC = () => {
           )}
         </div>
       </div>
+    )}
 
-      {/* Publish New Hostel Dialog */}
+    {/* TAB 2: MEAL TOKEN SCANNER */}
+    {activeTab === "meal-scanner" && (
+      <MealTokenScanner
+        redemptionHistory={redemptionHistory}
+        refreshHistory={fetchRedemptions}
+        onRedemptionSuccess={() => {
+          fetchRedemptions();
+          fetchData();
+        }}
+      />
+    )}
+
+    {/* TAB 3: MEAL PRICING & TIMINGS CONFIGURATION */}
+    {activeTab === "meal-pricing" && (
+      <OwnerMealPricingConfig
+        meals={mealsList}
+        onMealsUpdated={fetchMeals}
+        hostelName={hostels[0]?.name || "The Zenith Student Sanctuary"}
+      />
+    )}
+  </div>
+
+  {/* Publish New Hostel Dialog */}
       <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
         <DialogContent className="max-w-lg">
           <DialogHeader>

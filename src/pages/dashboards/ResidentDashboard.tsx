@@ -19,6 +19,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { SkeletonGrid } from "@/components/common/SkeletonCard";
 import { SkeletonTable } from "@/components/common/SkeletonTable";
+import { ResidentMealTokens } from "@/components/meals/ResidentMealTokens";
 import { toast } from "sonner";
 import {
   Search,
@@ -35,6 +36,7 @@ import {
   Coffee,
   Sparkles,
   Bed,
+  QrCode,
 } from "lucide-react";
 
 export const ResidentDashboard: React.FC = () => {
@@ -192,6 +194,9 @@ export const ResidentDashboard: React.FC = () => {
             <TabsList className="bg-neutral-100 p-1">
               <TabsTrigger value="explore" className="text-xs">
                 <Building className="h-3.5 w-3.5 mr-1.5" /> Discovery
+              </TabsTrigger>
+              <TabsTrigger value="meal-tokens" className="text-xs font-semibold">
+                <QrCode className="h-3.5 w-3.5 mr-1.5 text-emerald-600" /> My Meal Tokens
               </TabsTrigger>
               <TabsTrigger value="bookings" className="text-xs">
                 <CreditCard className="h-3.5 w-3.5 mr-1.5" /> Bookings & Invoices
@@ -582,6 +587,14 @@ export const ResidentDashboard: React.FC = () => {
               </div>
             )}
           </div>
+        )}
+
+        {/* TAB 4: MY MEAL TOKENS & AUTOMATIC BILLING */}
+        {activeTab === "meal-tokens" && (
+          <ResidentMealTokens
+            hostelId={myBookings[0]?.hostelId as string}
+            hostelName={myBookings[0]?.hostelName || "The Zenith Student Sanctuary"}
+          />
         )}
       </div>
 
